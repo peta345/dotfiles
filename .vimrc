@@ -8,7 +8,7 @@ set ruler
 set clipboard=unnamed,autoselect
 
 " 自動インデントを有効にする
-set autoindent
+"set autoindent
 
 
 " タブを表示する時の幅
@@ -101,6 +101,9 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=110
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
 let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_guide_size=1
+
+" '',()保管
+NeoBundle 'cohama/lexima.vim'
 
 "emmet
 NeoBundle 'mattn/emmet-vim'
