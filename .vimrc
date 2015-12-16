@@ -8,8 +8,10 @@ set ruler
 set clipboard=unnamed,autoselect
 
 " 自動インデントを有効にする
-"set autoindent
+set autoindent
 
+" swpをつくらない
+set noswapfile
 
 " タブを表示する時の幅
 set tabstop=4
@@ -104,6 +106,9 @@ let g:indent_guides_guide_size=1
 
 " '',()保管
 NeoBundle 'cohama/lexima.vim'
+
+" scala plug
+NeoBundle 'derekwyatt/vim-scala'
 
 "emmet
 NeoBundle 'mattn/emmet-vim'
