@@ -1,2 +1,11 @@
 # dotfiles
-hoge
+cd -> git clone "ここ"  
+
+//NeoBundleのダウンロード
+mkdir -p ~/.vim/bundle  
+git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim  
+//color  
+cd ~/.vim  
+mkdir colors
+cd colors
+git clone https://github.com/tomasr/molokai

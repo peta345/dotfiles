@@ -53,6 +53,87 @@ set backspace=indent,eol,start
 nnoremap j gj
 nnoremap k gk
 
+" mvvと打つと:を打ったようにする
+nnoremap mm :
+
+" jjでノーマルモードに戻る
+inoremap jj <Esc><Esc><Esc>
+
+" 検索時に対象を中央に表示
+nnoremap n nzz
+nnoremap N Nzz
+
+" カーソル下の単語を検索、中央に表示
+nnoremap * *zz
+nnoremap # #zz
+" カーソル下の単語を検索、中央に表示
+nnoremap g* g*zz
+nnoremap g# g#zz
+
+" 下へ移動する時に見た目の1行下に移動する
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
+" 対応するカッコへジャンプ
+nnoremap <Tab> %
+vnoremap <Tab> %
+
+" 以下で使用するキーバインドのため解除
+"iunmap <C-H>
+inoremap <C-H> <Left>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-l> <Right>
+
+"-------------------------
+" スクリーン系キーバインド
+"-------------------------
+" 入力時ctl押しながらhjklでカのみは無効
+nnoremap s <Nop>
+"  ウィンドウを横分割
+nnoremap ss :<C-u>sp<CR>
+"  ウィンドウを縦分割
+nnoremap sv :<C-u>vs<CR>
+"  カーソルを移動
+nnoremap sj <C-w>j
+nnoremap sk <C-w>k
+nnoremap sl <C-w>l
+nnoremap sh <C-w>h
+"  カーソルを次に移動
+nnoremap sw <C-w>w
+"  ウィンドウを移動
+nnoremap sJ <C-w>J
+nnoremap sK <C-w>K
+nnoremap sL <C-w>L
+nnoremap sH <C-w>H
+"  ウィンドウを移動(回転？近いウィンドウと反転なきがする)
+nnoremap sr <C-w>r
+"  タブの作成
+nnoremap st :<C-u>tabnew<CR>
+"  タブの一覧表示
+nnoremap sT :<C-u>Unite tab<CR>
+"  タブを移動
+nnoremap sn gt
+nnoremap sp gT
+"  ウィンドウの大きさを揃える
+nnoremap s= <C-w>=
+nnoremap sO <C-w>=
+" 縦横最大化
+nnoremap so <C-w>_<C-w>|
+"  開いてたバッファの移動
+nnoremap sN :<C-u>bn<CR>
+nnoremap sP :<C-u>bp<CR>
+"  ウィンドウを閉じる
+nnoremap sq :<C-u>q<CR>
+"  バッファを閉じる
+nnoremap sQ :<C-u>bd<CR>
+"  現在のタブで開いたバッファ一覧
+nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
+"  バッファ一覧
+nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
+
 " シンタックスを有効にする(コードをカラーを付けて見やすくする)
 syntax enable
 
@@ -94,15 +175,17 @@ autocmd FileType vimfiler nmap <buffer> <CR> <Plug>(vimfiler_expand_or_edit)
 
 "vimの下のファイルのとこ綺麗にする
 NeoBundle 'itchyny/lightline.vim'
+" 構文チェック
+NeoBundle 'scrooloose/syntastic'
 
 "インデントに色をつける
-NeoBundle 'nathanaelkane/vim-indent-guides'
+"NeoBundle 'nathanaelkane/vim-indent-guides'
 " indent guid setting
-let g:indent_guides_auto_colors=0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=110
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
-let g:indent_guides_enable_on_vim_startup=1
-let g:indent_guides_guide_size=1
+"let g:indent_guides_auto_colors=0
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=110
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
+"let g:indent_guides_enable_on_vim_startup=1
+"let g:indent_guides_guide_size=1
 
 " '',()保管
 NeoBundle 'cohama/lexima.vim'
