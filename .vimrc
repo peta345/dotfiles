@@ -55,6 +55,16 @@ nnoremap k gk
 
 " mvvと打つと:を打ったようにする
 nnoremap mm :
+" 行頭　へ
+nnoremap hh 0 　
+" 行末へ
+nnoremap tt $
+
+" 挿入モードでのカーソル移動
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
 
 " jjでノーマルモードに戻る
 inoremap jj <Esc><Esc><Esc>
