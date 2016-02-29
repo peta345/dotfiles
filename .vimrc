@@ -53,6 +53,8 @@ set backspace=indent,eol,start
 nnoremap j gj
 nnoremap k gk
 
+" Yでカーソルから行末までヤンク
+nnoremap Y y$
 " mvvと打つと:を打ったようにする
 nnoremap mm :
 " 行頭　へ
@@ -148,7 +150,7 @@ nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
 syntax enable
 
 " カラー設定
-colorscheme molokai
+colorscheme badwolf
 set t_Co=256
 
 " エンコーディングをutf8に設定
