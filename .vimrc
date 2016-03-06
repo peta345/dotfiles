@@ -4,7 +4,15 @@ set nu
 " 右下に表示される行・列の番号を表示
 set ruler
 
+"行番号の色
+autocmd ColorScheme * highlight LineNr ctermfg=200
+
+set cursorline
+set cursorcolumn
+
 " yankをクリップボードへ
+" set cursorcolumn
+" u
 set clipboard=unnamed,autoselect
 
 " 自動インデントを有効にする
@@ -58,7 +66,7 @@ nnoremap Y y$
 " mvvと打つと:を打ったようにする
 nnoremap mm :
 " 行頭　へ
-nnoremap hh 0 　
+nnoremap bb 0 　
 " 行末へ
 nnoremap tt $
 
