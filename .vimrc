@@ -54,6 +54,19 @@ set wildmenu
 " Deleteキーを有効にする
 set t_kD=^?
 
+" メッセージ表示欄を2行確保
+set cmdheight=2
+
+" 行頭行末の左右移動で行をまたぐ
+set whichwrap=b,s,h,l,<,>,[,] 
+" 上下8行の視界を確保
+set scrolloff=8            
+" 左右スクロール時の視界を確保
+set sidescrolloff=16 
+" 左右スクロールは一文字づつ行う
+set sidescroll=1               
+
+
 " バックスペースキーの動作を普通のテキストエディタと同じようにする
 set backspace=indent,eol,start
 
@@ -65,10 +78,6 @@ nnoremap k gk
 nnoremap Y y$
 " mvvと打つと:を打ったようにする
 nnoremap mm :
-" 行頭　へ
-nnoremap bb 0 　
-" 行末へ
-nnoremap tt $
 
 " 挿入モードでのカーソル移動
 inoremap <C-j> <Down>
@@ -106,6 +115,9 @@ inoremap <C-H> <Left>
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
+
+" はりつけ
+nnoremap pp :r !pbpaste
 
 "-------------------------
 " スクリーン系キーバインド
@@ -155,7 +167,11 @@ nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
 nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
 
 " シンタックスを有効にする(コードをカラーを付けて見やすくする)
-syntax enable
+"syntax enable
+syntax on
+
+" haskell pluugin
+filetype plugin indent on
 
 " カラー設定
 colorscheme badwolf
@@ -188,6 +204,7 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 " インストールするプラグインをここに記述
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
+noremap <C-X><C-T> :VimFiler -split -simple -winwidth=45 -no-quit<ENTER>
 "vimfilerを標準のファいらに
 let g:vimfiler_as_default_explorer = 1
 "ディレクトリに移動せず子を表示
@@ -286,3 +303,48 @@ function! LightLineMode()
   return winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 "============light.vim end==========
+
+" Anywhere SID.
+function! s:SID_PREFIX()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+
+" Set tabline.
+function! s:my_tabline()  "{{{
+  let s = ''
+  for i in range(1, tabpagenr('$'))
+    let bufnrs = tabpagebuflist(i)
+    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
+    let no = i  " display 0-origin tabpagenr.
+    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
+    let title = fnamemodify(bufname(bufnr), ':t')
+    let title = '[' . title . ']'
+    let s .= '%'.i.'T'
+    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
+    let s .= no . ':' . title
+    let s .= mod
+    let s .= '%#TabLineFill# '
+  endfor
+  let s .= '%#TabLineFill#%T%=%#TabLine#'
+  return s
+endfunction "}}}
+let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
+set showtabline=2 " 常にタブラインを表示
+
+" The prefix key.
+nnoremap    [Tag]   <Nop>
+nmap    t [Tag]
+" Tab jump
+for n in range(1, 9)
+  execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
+endfor
+" t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
+
+map <silent> [Tag]c :tablast <bar> tabnew<CR>
+" tc 新しいタブを一番右に作る
+map <silent> [Tag]x :tabclose<CR>
+" tx タブを閉じる
+map <silent> [Tag]n :tabnext<CR>
+" tn 次のタブ
+map <silent> [Tag]p :tabprevious<CR>
+" tp 前のタブ
