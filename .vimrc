@@ -5,25 +5,25 @@ set nu
 set ruler
 
 "行番号の色
-autocmd ColorScheme * highlight LineNr ctermfg=200
+autocmd ColorScheme * highlight LineNr ctermfg=57
 
 set cursorline
 set cursorcolumn
 
 " yankをクリップボードへ
 " set cursorcolumn
-" u
 set clipboard=unnamed,autoselect
 
 " 自動インデントを有効にする
 set autoindent
+set smartindent
 
 " swpをつくらない
 set noswapfile
 
 " タブを表示する時の幅
 set tabstop=4
-
+set expandtab
 " 自動で挿入されるインデントの幅
 set shiftwidth=4
 
@@ -67,6 +67,10 @@ set sidescrolloff=16
 set sidescroll=1               
 
 
+" 不可視文字を可視化
+set list  " 不可視文字を表示する
+set listchars=tab:>-,trail:.  " タブを >--- 半スペを . で表示する
+
 " バックスペースキーの動作を普通のテキストエディタと同じようにする
 set backspace=indent,eol,start
 
@@ -78,6 +82,11 @@ nnoremap k gk
 nnoremap Y y$
 " mvvと打つと:を打ったようにする
 nnoremap mm :
+
+" {}でエンターすると改行する
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap [<Enter> []<Left><CR><ESC><S-o>
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
 
 " 挿入モードでのカーソル移動
 inoremap <C-j> <Down>
@@ -204,7 +213,8 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 " インストールするプラグインをここに記述
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
-noremap <C-X><C-T> :VimFiler -split -simple -winwidth=45 -no-quit<ENTER>
+" tree表示
+noremap <C-X> :VimFiler -split -simple -winwidth=45 -no-quit<ENTER>
 "vimfilerを標準のファいらに
 let g:vimfiler_as_default_explorer = 1
 "ディレクトリに移動せず子を表示
@@ -216,13 +226,22 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'scrooloose/syntastic'
 
 "インデントに色をつける
-"NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'nathanaelkane/vim-indent-guides'
 " indent guid setting
 "let g:indent_guides_auto_colors=0
 "autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=110
 "autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
 "let g:indent_guides_enable_on_vim_startup=1
 "let g:indent_guides_guide_size=1
+
+" インデントガイドをオン
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors=0
+let g:indent_guides_start_level=2
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239 guibg=Gray28
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=241 guibg=Gray32
+let g:indent_guides_color_change_percent = 30
+let g:indent_guides_guide_size = 1
 
 " '',()保管
 NeoBundle 'cohama/lexima.vim'
