@@ -1,83 +1,54 @@
-" 行番号の表示
-set nu
-
-" 右下に表示される行・列の番号を表示
-set ruler
-
-"行番号の色
-autocmd ColorScheme * highlight LineNr ctermfg=57
-
-set cursorline
-set cursorcolumn
-
-" yankをクリップボードへ
-" set cursorcolumn
-set clipboard=unnamed,autoselect
-
+"================================
+" setting
+"=================================
+"文字コードをUFT-8に設定
+set fenc=utf-8
+" バックアップファイルを作らない
+set nobackup
+" スワップファイルを作らない
+set noswapfile
+" 編集中のファイルが変更されたら自動で読み直す
+set autoread
+" バッファが編集中でもその他のファイルを開けるように
+set hidden
+" 入力中のコマンドをステータスに表示する
+set showcmd
+" 行頭行末の左右移動で行をまたぐ
+set whichwrap=b,s,h,l,<,>,[,] 
 " 自動インデントを有効にする
 set autoindent
 set smartindent
 
-" swpをつくらない
-set noswapfile
 
-" タブを表示する時の幅
-set tabstop=4
-set expandtab
-" 自動で挿入されるインデントの幅
-set shiftwidth=4
 
-" タブ入力時の幅を4に設定
-set softtabstop=4
-
-" 閉じ括弧入力時に対応する括弧の強調
+"=================================
+" 見た目系
+"=================================
+" 行番号を表示
+set number
+" 現在の行を強調表示
+set cursorline
+" 現在の行を強調表示（縦）
+set cursorcolumn
+" 行末の1文字先までカーソルを移動できるように
+set virtualedit=onemore
+" インデントはスマートインデント
+set smartindent
+" ビープ音を可視化
+set visualbell
+" 括弧入力時の対応する括弧を表示
 set showmatch
-
-" showmatch設定の表示秒数(0.1秒単位)
-set matchtime=4
-
-" インクリメンタルサーチを行う(検索文字入力中から検索)
-set incsearch
-
-" 文字列検索で大文字小文字を区別しない
-set ignorecase
-
-" 文字列検索でマッチするものをハイライト表示する
-set hlsearch
-
-" 検索文字に大文字が含まれる場合にignorecaseをOFFにする(大文字小文字を区別する)
-set smartcase
-
-" コマンドラインにおける補完候補の表示
-set wildmenu
-
-" Deleteキーを有効にする
-set t_kD=^?
-
-" メッセージ表示欄を2行確保
-set cmdheight=2
-
-" 行頭行末の左右移動で行をまたぐ
-set whichwrap=b,s,h,l,<,>,[,] 
-" 上下8行の視界を確保
-set scrolloff=8            
-" 左右スクロール時の視界を確保
-set sidescrolloff=16 
-" 左右スクロールは一文字づつ行う
-set sidescroll=1               
-
-
-" 不可視文字を可視化
-set list  " 不可視文字を表示する
-set listchars=tab:>-,trail:.  " タブを >--- 半スペを . で表示する
-
-" バックスペースキーの動作を普通のテキストエディタと同じようにする
-set backspace=indent,eol,start
-
-" 見た目によるカーソル移動をする(1行が複数行に渡って表示されている時に表示上の行ごとに上下移動させる)
+" ステータスラインを常に表示
+set laststatus=2
+" コマンドラインの補完
+set wildmode=list:longest
+" 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
-
+" jjでノーマルモードに戻る
+inoremap jj <Esc><Esc><Esc>
+" 右下に列番号などを表示
+set ruler
 " Yでカーソルから行末までヤンク
 nnoremap Y y$
 " mvvと打つと:を打ったようにする
@@ -93,113 +64,50 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
-
-" jjでノーマルモードに戻る
-inoremap jj <Esc><Esc><Esc>
-
-" 検索時に対象を中央に表示
-nnoremap n nzz
-nnoremap N Nzz
-
-" カーソル下の単語を検索、中央に表示
-nnoremap * *zz
-nnoremap # #zz
-" カーソル下の単語を検索、中央に表示
-nnoremap g* g*zz
-nnoremap g# g#zz
-
-" 下へ移動する時に見た目の1行下に移動する
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
-
-" 対応するカッコへジャンプ
-nnoremap <Tab> %
-vnoremap <Tab> %
-
-" 以下で使用するキーバインドのため解除
-"iunmap <C-H>
-inoremap <C-H> <Left>
-inoremap <C-j> <Down>
-inoremap <C-k> <Up>
-inoremap <C-l> <Right>
-
 " はりつけ
 nnoremap pp :r !pbpaste
 
-"-------------------------
-" スクリーン系キーバインド
-"-------------------------
-" 入力時ctl押しながらhjklでカのみは無効
-nnoremap s <Nop>
-"  ウィンドウを横分割
-nnoremap ss :<C-u>sp<CR>
-"  ウィンドウを縦分割
-nnoremap sv :<C-u>vs<CR>
-"  カーソルを移動
-nnoremap sj <C-w>j
-nnoremap sk <C-w>k
-nnoremap sl <C-w>l
-nnoremap sh <C-w>h
-"  カーソルを次に移動
-nnoremap sw <C-w>w
-"  ウィンドウを移動
-nnoremap sJ <C-w>J
-nnoremap sK <C-w>K
-nnoremap sL <C-w>L
-nnoremap sH <C-w>H
-"  ウィンドウを移動(回転？近いウィンドウと反転なきがする)
-nnoremap sr <C-w>r
-"  タブの作成
-nnoremap st :<C-u>tabnew<CR>
-"  タブの一覧表示
-nnoremap sT :<C-u>Unite tab<CR>
-"  タブを移動
-nnoremap sn gt
-nnoremap sp gT
-"  ウィンドウの大きさを揃える
-nnoremap s= <C-w>=
-nnoremap sO <C-w>=
-" 縦横最大化
-nnoremap so <C-w>_<C-w>|
-"  開いてたバッファの移動
-nnoremap sN :<C-u>bn<CR>
-nnoremap sP :<C-u>bp<CR>
-"  ウィンドウを閉じる
-nnoremap sq :<C-u>q<CR>
-"  バッファを閉じる
-nnoremap sQ :<C-u>bd<CR>
-"  現在のタブで開いたバッファ一覧
-nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
-"  バッファ一覧
-nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
-
-" シンタックスを有効にする(コードをカラーを付けて見やすくする)
-"syntax enable
+" 色設定
 syntax on
-
-" haskell pluugin
-filetype plugin indent on
-
 " カラー設定
 colorscheme badwolf
 set t_Co=256
-
 " エンコーディングをutf8に設定
 set encoding=utf8
-
 " ファイルエンコードをutf8に設定
 set fileencoding=utf-8
-
 " 編集中のファイル名を表示
 set title
-
 " ウィンドウの幅より長い行は折り返して表示
 set wrap
 
-"light.vimの設定
-set laststatus=2
+
+" Tab系
+" 不可視文字を可視化(タブが「▸-」と表示される)
+set list listchars=tab:\▸\-
+" Tab文字を半角スペースにする
+set expandtab
+" 行頭以外のTab文字の表示幅（スペースいくつ分）
+set tabstop=2
+" 行頭でのTab文字の表示幅
+set shiftwidth=2
+
+
+" 検索系
+" 検索文字列が小文字の場合は大文字小文字を区別なく検索する
+set ignorecase
+" 検索文字列に大文字が含まれている場合は区別して検索する
+set smartcase
+" 検索文字列入力時に順次対象文字列にヒットさせる
+set incsearch
+" 検索時に最後まで行ったら最初に戻る
+set wrapscan
+" 検索語をハイライト表示
+set hlsearch
+" ESC連打でハイライト解除
+nmap <Esc><Esc> :nohlsearch<CR><Esc>
+
+
 
 "============NeoBundole============
 if has('vim_starting')
@@ -225,15 +133,6 @@ NeoBundle 'itchyny/lightline.vim'
 " 構文チェック
 NeoBundle 'scrooloose/syntastic'
 
-"インデントに色をつける
-NeoBundle 'nathanaelkane/vim-indent-guides'
-" indent guid setting
-"let g:indent_guides_auto_colors=0
-"autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=110
-"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
-"let g:indent_guides_enable_on_vim_startup=1
-"let g:indent_guides_guide_size=1
-
 " インデントガイドをオン
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors=0
@@ -245,10 +144,8 @@ let g:indent_guides_guide_size = 1
 
 " '',()保管
 NeoBundle 'cohama/lexima.vim'
-
-" scala plug
-NeoBundle 'derekwyatt/vim-scala'
-
+" golang  
+NeoBundle 'fatih/vim-go'  
 "emmet
 NeoBundle 'mattn/emmet-vim'
 autocmd FileType html imap <buffer><expr><tab>
@@ -258,7 +155,6 @@ call neobundle#end()
 
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
-"============NeoBundole============
 
 "============light.vim=============
 let g:lightline = {
@@ -322,12 +218,12 @@ function! LightLineMode()
   return winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 "============light.vim end==========
+"
 
 " Anywhere SID.
 function! s:SID_PREFIX()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
-
 " Set tabline.
 function! s:my_tabline()  "{{{
   let s = ''
