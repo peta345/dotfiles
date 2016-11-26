@@ -1,5 +1,6 @@
-"================================
+"===============================
 " setting
+" プラグイン系は111
 "=================================
 "文字コードをUFT-8に設定
 set fenc=utf-8
@@ -18,8 +19,8 @@ set whichwrap=b,s,h,l,<,>,[,]
 " 自動インデントを有効にする
 set autoindent
 set smartindent
-
-
+set backspace=indent,eol,start
+set clipboard=unnamed,autoselect
 
 "=================================
 " 見た目系
@@ -70,7 +71,7 @@ nnoremap pp :r !pbpaste
 " 色設定
 syntax on
 " カラー設定
-colorscheme badwolf
+colorscheme molokai
 set t_Co=256
 " エンコーディングをutf8に設定
 set encoding=utf8
@@ -91,6 +92,14 @@ set expandtab
 set tabstop=2
 " 行頭でのTab文字の表示幅
 set shiftwidth=2
+"  タブの作成
+nnoremap ct :<C-u>tabnew<CR>
+" delete tab
+nnoremap dt :<C-u>tabclose<CR>
+
+" 垂直分割
+nnoremap sv :<C-u>vsplit<CR>
+
 
 
 " 検索系
@@ -106,57 +115,65 @@ set wrapscan
 set hlsearch
 " ESC連打でハイライト解除
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
+" ステータスライン
+set laststatus=2
 
+" http://blog.remora.cx/2010/12/vim-ref-with-unite.html
+""""""""""""""""""""""""""""""
+" Unit.vimの設定
+""""""""""""""""""""""""""""""
+" 入力モードで開始する
+let g:unite_enable_start_insert=1
+" バッファ一覧
+noremap <C-P> :Unite buffer<CR>
+" ファイル一覧
+noremap <C-N> :Unite -buffer-name=file file<CR>
+" 最近使ったファイルの一覧
+noremap <C-Z> :Unite file_mru<CR>
+" sourcesを「今開いているファイルのディレクトリ」とする
+noremap :uff :<C-u>UniteWithBufferDir file -buffer-name=file<CR>
+" ウィンドウを分割して開く
+au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
+au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
+" ウィンドウを縦に分割して開く
+au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
+au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
+" ESCキーを2回押すと終了する
+au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
+au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
+""""""""""""""""""""""""""""""
 
+" http://inari.hatenablog.com/entry/2014/05/05/231307
+""""""""""""""""""""""""""""""
+" 全角スペースの表示
+""""""""""""""""""""""""""""""
+function! ZenkakuSpace()
+    highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
+endfunction
 
-"============NeoBundole============
-if has('vim_starting')
-   " 初回起動時のみruntimepathにneobundleのパスを指定する
-   set runtimepath+=~/.vim/bundle/neobundle.vim/
+if has('syntax')
+    augroup ZenkakuSpace
+        autocmd!
+        autocmd ColorScheme * call ZenkakuSpace()
+        autocmd VimEnter,WinEnter,BufRead * let w:m1=matchadd('ZenkakuSpace', '　')
+    augroup END
+    call ZenkakuSpace()
 endif
+""""""""""""""""""""""""""""""
 
-" NeoBundleを初期化
-call neobundle#begin(expand('~/.vim/bundle/'))
-
-" インストールするプラグインをここに記述
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimfiler'
-" tree表示
-noremap <C-X> :VimFiler -split -simple -winwidth=45 -no-quit<ENTER>
-"vimfilerを標準のファいらに
-let g:vimfiler_as_default_explorer = 1
-"ディレクトリに移動せず子を表示
-autocmd FileType vimfiler nmap <buffer> <CR> <Plug>(vimfiler_expand_or_edit)
-
-"vimの下のファイルのとこ綺麗にする
-NeoBundle 'itchyny/lightline.vim'
-" 構文チェック
-NeoBundle 'scrooloose/syntastic'
-
-" インデントガイドをオン
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_auto_colors=0
-let g:indent_guides_start_level=2
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=239 guibg=Gray28
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=241 guibg=Gray32
-let g:indent_guides_color_change_percent = 30
-let g:indent_guides_guide_size = 1
-
-" '',()保管
-NeoBundle 'cohama/lexima.vim'
-" golang  
-NeoBundle 'fatih/vim-go'  
-"emmet
-NeoBundle 'mattn/emmet-vim'
+"emmet script-----------------------------
 autocmd FileType html imap <buffer><expr><tab>
     \ emmet#isExpandable() ? "\<plug>(emmet-expand-abbr)" :
     \ "\<tab>"
-call neobundle#end()
 
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
 
-"============light.vim=============
+" nerdtree script ------------------------
+" booting tree useing C-e
+nnoremap <silent><C-e> :NERDTreeToggle<CR>
+
+"light-line scripts-----------------------
 let g:lightline = {
         \ 'colorscheme': 'wombat',
         \ 'mode_map': {'c': 'NORMAL'},
@@ -164,102 +181,103 @@ let g:lightline = {
         \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
         \ },
         \ 'component_function': {
-        \   'modified': 'LightLineModified',
-        \   'readonly': 'LightLineReadonly',
-        \   'fugitive': 'LightLineFugitive',
-        \   'filename': 'LightLineFilename',
-        \   'fileformat': 'LightLineFileformat',
-        \   'filetype': 'LightLineFiletype',
-        \   'fileencoding': 'LightLineFileencoding',
-        \   'mode': 'LightLineMode'
+        \   'modified': 'LightlineModified',
+        \   'readonly': 'LightlineReadonly',
+        \   'fugitive': 'LightlineFugitive',
+        \   'filename': 'LightlineFilename',
+        \   'fileformat': 'LightlineFileformat',
+        \   'filetype': 'LightlineFiletype',
+        \   'fileencoding': 'LightlineFileencoding',
+        \   'mode': 'LightlineMode'
         \ }
         \ }
 
-function! LightLineModified()
+function! LightlineModified()
   return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
-function! LightLineReadonly()
+function! LightlineReadonly()
   return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? 'x' : ''
 endfunction
 
-function! LightLineFilename()
-  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+function! LightlineFilename()
+  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
         \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
         \  &ft == 'unite' ? unite#get_status_string() :
         \  &ft == 'vimshell' ? vimshell#get_status_string() :
         \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-        \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
 endfunction
 
-function! LightLineFugitive()
-  try
-    if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
-      return fugitive#head()
-    endif
-  catch
-  endtry
-  return ''
+function! LightlineFugitive()
+  if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
+    return fugitive#head()
+  else
+    return ''
+  endif
 endfunction
 
-function! LightLineFileformat()
+function! LightlineFileformat()
   return winwidth(0) > 70 ? &fileformat : ''
 endfunction
 
-function! LightLineFiletype()
-  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+function! LightlineFiletype()
+  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
 endfunction
 
-function! LightLineFileencoding()
-  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+function! LightlineFileencoding()
+  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
 endfunction
 
-function! LightLineMode()
+function! LightlineMode()
   return winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
-"============light.vim end==========
-"
 
-" Anywhere SID.
-function! s:SID_PREFIX()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
-endfunction
-" Set tabline.
-function! s:my_tabline()  "{{{
-  let s = ''
-  for i in range(1, tabpagenr('$'))
-    let bufnrs = tabpagebuflist(i)
-    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
-    let no = i  " display 0-origin tabpagenr.
-    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
-    let title = fnamemodify(bufname(bufnr), ':t')
-    let title = '[' . title . ']'
-    let s .= '%'.i.'T'
-    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
-    let s .= no . ':' . title
-    let s .= mod
-    let s .= '%#TabLineFill# '
-  endfor
-  let s .= '%#TabLineFill#%T%=%#TabLine#'
-  return s
-endfunction "}}}
-let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
-set showtabline=2 " 常にタブラインを表示
+" fugitive wcript ------------------------
+" grep検索の実行後にQuickFix Listを表示する
+autocmd QuickFixCmdPost *grep* cwindow
 
-" The prefix key.
-nnoremap    [Tag]   <Nop>
-nmap    t [Tag]
-" Tab jump
-for n in range(1, 9)
-  execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
-endfor
-" t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
+"dein Scripts-----------------------------
+if &compatible
+  set nocompatible               " Be iMproved
+endif
 
-map <silent> [Tag]c :tablast <bar> tabnew<CR>
-" tc 新しいタブを一番右に作る
-map <silent> [Tag]x :tabclose<CR>
-" tx タブを閉じる
-map <silent> [Tag]n :tabnext<CR>
-" tn 次のタブ
-map <silent> [Tag]p :tabprevious<CR>
-" tp 前のタブ
+" Required:
+set runtimepath+=/Users/Peta/.vim/bundle/repos/github.com/Shougo/dein.vim
+
+" Required:
+call dein#begin('/Users/Peta/.vim/bundle')
+
+" Let dein manage dein
+" Required:
+call dein#add('Shougo/dein.vim')
+call dein#add('mattn/emmet-vim')
+call dein#add('itchyny/lightline.vim')
+call dein#add('Shougo/vimfiler')
+call dein#add('Shougo/unite.vim')
+call dein#add('cohama/lexima.vim')
+call dein#add('scrooloose/nerdtree')
+"call dein#add('tpope/vim-fugitive')
+call dein#add('ctrlpvim/ctrlp.vim')
+call dein#add('tomtom/tcomment_vim')
+call dein#add('dag/vim2hs')
+" Add or remove your plugins here:
+call dein#add('Shougo/neosnippet.vim')
+call dein#add('Shougo/neosnippet-snippets')
+
+" You can specify revision/branch/tag.
+call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
+
+" Required:
+call dein#end()
+
+" Required:
+filetype plugin indent on
+syntax enable
+
+" If you want to install not installed plugins on startup.
+if dein#check_install()
+  call dein#install()
+endif
+
+"End dein Scripts-------------------------

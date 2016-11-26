@@ -1,16 +1,10 @@
-# dotfiles
-cd -> git clone "ここ"  
+## setup
+1. cd  
+2. git clone "https://github.com/peta345/dotfiles.git"  
+3. cd dotfiles  
+4. sh dotfilesLink.sh
+5. Edit your runtimepath of "dein" on .vimrc  
 
-cd dotfiles -> sh dotfilesLink.sh で.vimrcのエイリアスを作っておく
-//NeoBundleのダウンロード
-mkdir -p ~/.vim/bundle  
-git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim  
+6. git clone https://github.com/tomasr/molokai \ ~/.vim/colors  
 
-//color molokai.vim を~/.vim/colors　にもってくる  
-cd ~/.vim  
-mkdir colors
-cd colors
-git clone https://github.com/tomasr/molokai  
-
-mv milokai/colors/molokai.vim ~/.vim/colors  
 
